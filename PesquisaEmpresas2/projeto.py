@@ -21,7 +21,7 @@ plt.close('all')
 plt.figure(figsize=(14, 8))
 
 # Criar barras com cores diferentes
-bars = plt.bar(range(len(continents)), market_values, color='green')
+bars = plt.bar(range(len(continents)), market_values, color='teal')
 
 # Personalizar
 plt.xticks(range(len(continents)), [f'{cont}\n({comp})' for cont, comp in zip(continents, company_names)],
@@ -60,7 +60,7 @@ companies = top10_sub['Company']
 market_values = top10_sub['Market Value ($billion)']
 
 plt.figure(figsize=(16, 6))
-bars = plt.barh(companies, market_values, color='salmon')
+bars = plt.barh(companies, market_values, color='teal')
 
 # Adicionar rótulos
 for bar, value in zip(bars, market_values):
