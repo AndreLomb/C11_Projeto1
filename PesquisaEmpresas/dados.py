@@ -9,8 +9,12 @@ df = pd.read_csv('Top2000CompaniesGlobally.csv', delimiter=',')
 #→ Insight: países com maior poder econômico global.
 paises = df['Country']
 counts = paises.value_counts()
-print(counts.head(5))
+#print(counts.head(5))
 
+plt.bar(counts.index[:5], counts.values[:5], color='green')
+plt.xlabel('País')
+plt.ylabel('Número de empresas')
+plt.show()
 
 #2. Qual setor econômico domina a lista das maiores empresas?
 #→ Insight: entender quais indústrias têm mais peso no PIB mundial.
