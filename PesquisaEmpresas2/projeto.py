@@ -21,7 +21,6 @@ plt.close('all')
 plt.figure(figsize=(14, 8))
 
 # Criar barras com cores diferentes
-colors = plt.cm.Set3(range(len(continents)))
 bars = plt.bar(range(len(continents)), market_values, color='green')
 
 # Personalizar
