@@ -22,7 +22,7 @@ plt.figure(figsize=(14, 8))
 
 # Criar barras com cores diferentes
 colors = plt.cm.Set3(range(len(continents)))
-bars = plt.bar(range(len(continents)), market_values, color=colors)
+bars = plt.bar(range(len(continents)), market_values, color='green')
 
 # Personalizar
 plt.xticks(range(len(continents)), [f'{cont}\n({comp})' for cont, comp in zip(continents, company_names)],
@@ -60,7 +60,7 @@ top10_sub = profit_under.head(10)
 companies = top10_sub['Company']
 market_values = top10_sub['Market Value ($billion)']
 
-plt.figure(figsize=(12, 6))
+plt.figure(figsize=(16, 6))
 bars = plt.barh(companies, market_values, color='salmon')
 
 # Adicionar rótulos
@@ -75,7 +75,7 @@ plt.tight_layout()
 plt.show()
 
 #Parte 2 - Comparação entre valor de mercado e ativos
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(16, 6))
 
 plt.scatter(df['Assets ($billion)'],
             df['Market Value ($billion)'],
