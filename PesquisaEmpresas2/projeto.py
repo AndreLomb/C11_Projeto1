@@ -18,6 +18,7 @@ company_names = companies['Company']
 market_values = companies['Market Value ($billion)']
 
 plt.close('all')
+plt.style.use('seaborn-v0_8')
 plt.figure(figsize=(14, 8))
 
 # Criar barras com cores diferentes
