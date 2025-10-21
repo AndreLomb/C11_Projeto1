@@ -40,8 +40,60 @@ plt.show()
 plt.close('all')
 
 #=========================================================================================
-#[Dedé]  5. Setores de tecnologia apresentam maior lucratividade média que os industriais?
+# 5. Empresas com muitos ativos tendem a ser mais lucrativas?
+#Insight: Há correlação entre ativos totais e lucro?
 
+plt.figure(figsize=(12, 8))
+plt.scatter(df['Assets ($billion)'], df['Profits ($billion)'],
+           alpha=0.6, color='teal', s=60)
+plt.xlabel('Ativos ($bilhões)', fontsize=12)
+plt.ylabel('Lucros ($bilhões)', fontsize=12)
+plt.title('Relação entre Ativos Totais e Lucro', fontsize=14)
+plt.grid(True, alpha=0.3)
+
+# 1. Ajustar uma reta aos dados (regressão linear)
+coeficiente_angular, coeficiente_linear = np.polyfit(
+    df['Assets ($billion)'],  # Variável independente (X)
+    df['Profits ($billion)'], # Variável dependente (Y)
+    1                         # Grau do polinômio (1 = linha reta)
+)
+
+# 2. Criar função da linha de tendência
+linha_tendencia = np.poly1d([coeficiente_angular, coeficiente_linear])
+
+# 3. Plotar a linha de tendência
+plt.plot(df['Assets ($billion)'],
+         linha_tendencia(df['Assets ($billion)']),
+         color='red',
+         linestyle='--',
+         alpha=0.8,
+         label=f'Linha de Tendência (y = {coeficiente_angular:.2f}x + {coeficiente_linear:.2f})')
+
+# Adicionar legenda
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+correlation = df['Assets ($billion)'].corr(df['Profits ($billion)'])
+print(f"Coeficiente de correlação: {correlation:.3f}")
+
+# Interpretação
+if abs(correlation) > 0.7:
+    strength = "forte"
+elif abs(correlation) > 0.3:
+    strength = "moderada"
+else:
+    strength = "fraca"
+
+direction = "positiva" if correlation > 0 else "negativa"
+print(f"Relação {strength} e {direction}s")
+
+if correlation > 0.5:
+    print("Empresas com mais ativos tendem a ser MAIS lucrativas")
+elif correlation < -0.5:
+    print("Empresas com mais ativos tendem a ser MENOS lucrativas")
+else:
+    print("Pouca evidência de relação entre ativos e lucratividade.\n")
 #=========================================================================================
 
 #[Dedé] 6. Quais as top10 empresas mais subvalorizadas? Existe relação entre o valor de mercado e o total de ativos de uma empresa?
