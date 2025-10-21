@@ -128,15 +128,28 @@ plt.show()
 
 #Parte 2 - Comparação entre valor de mercado e ativos
 plt.figure(figsize=(16, 6))
-
 plt.scatter(df['Assets ($billion)'],
             df['Market Value ($billion)'],
-            alpha=0.6, color='teal')
+            alpha=0.6, color='teal', label='Empresas')
 
+# Calcular a linha de tendência (regressão linear)
+x = df['Assets ($billion)']
+y = df['Market Value ($billion)']
+
+# Ajuste linear: y = a*x + b
+a, b = np.polyfit(x, y, 1)
+
+# Gerar valores previstos
+y_pred = a * x + b
+
+# Plotar a linha de tendência
+plt.plot(x, y_pred, color='darkorange', linewidth=2.5, label=f'Tendência: y = {a:.2f}x + {b:.2f}')
+
+# Labels e título
 plt.xlabel('Ativos Totais (US$ bilhões)')
 plt.ylabel('Valor de Mercado (US$ bilhões)')
-plt.title('Relação entre Valor de Mercado e Ativos')
+plt.title('Relação entre Valor de Mercado e Ativos (com linha de tendência)')
 plt.grid(alpha=0.3)
-
+plt.legend()
 plt.tight_layout()
 plt.show()
