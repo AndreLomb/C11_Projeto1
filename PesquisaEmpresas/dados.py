@@ -214,5 +214,119 @@ plt.tight_layout()
 plt.show()
 #===================================================================================================================================
 
+#===================================================================================================================================
+#7. Quais países tem as empresas com maior lucro médio em relação à receita (Margem de Lucro)?
+#→ Insight: países com maior eficiência empresarial.
+plt.close('all')
+plt.style.use('seaborn-v0_8')
+
+df['MargemLucro'] = (df['Profits ($billion)'] / df['Sales ($billion)']) * 100
+df['MargemLucro'] = df['MargemLucro'].replace([np.inf, -np.inf], np.nan)
+
+margem_pais = df.groupby('Country')['MargemLucro'].mean().sort_values(ascending=False)
+top10_margem = margem_pais.head(10)
+
+plt.figure(figsize=(12, 6))
+bars = plt.bar(top10_margem.index, top10_margem.values, color='teal')
+plt.title('Top 10 Países com Maior Margem de Lucro Média', fontsize=14)
+plt.ylabel('Margem de Lucro Média (%)')
+plt.xticks(rotation=45, ha='right')
+
+for bar, val in zip(bars, top10_margem.values):
+    plt.text(bar.get_x() + bar.get_width()/2, val + 0.5, f'{val:.1f}%', ha='center', fontsize=9)
+
+plt.tight_layout()
+plt.show()
+#===================================================================================================================================
 
 
+
+#===================================================================================================================================
+#8. Há correlação entre o ranking e o valor de mercado (ou receita)?
+#→ Insight: verificar se o tamanho da empresa influencia na posição global.
+plt.close('all')
+plt.style.use('seaborn-v0_8')
+
+corr_market = df['Global Rank'].corr(df['Market Value ($billion)'])
+corr_sales = df['Global Rank'].corr(df['Sales ($billion)'])
+
+plt.figure(figsize=(10, 5))
+plt.scatter(df['Global Rank'], df['Market Value ($billion)'], alpha=0.6, color='teal')
+plt.xlabel('Ranking Global')
+plt.ylabel('Valor de Mercado (US$ bilhões)')
+plt.title('Correlação entre Ranking e Valor de Mercado')
+plt.grid(alpha=0.3)
+plt.gca().invert_xaxis()  # Rank 1 à esquerda
+plt.tight_layout()
+plt.show()
+
+print(f"Correlação Rank vs Valor de Mercado: {corr_market:.3f}")
+print(f"Correlação Rank vs Receita: {corr_sales:.3f}")
+
+if corr_market < -0.7:
+    print("Correlação forte e negativa: melhores posições tendem a ter maior valor de mercado.")
+elif corr_market < -0.3:
+    print("Correlação moderada e negativa: ranking tende a refletir o tamanho das empresas.")
+else:
+    print("Correlação fraca: ranking não segue proporcionalmente o valor de mercado.")
+#===================================================================================================================================
+
+
+
+#===================================================================================================================================
+#9. Qual continente concentra o maior número de empresas do ranking?
+#   E quais são essas empresas com suas posições.
+#→ Insight: distribuição geográfica da influência econômica.
+plt.close('all')
+plt.style.use('seaborn-v0_8')
+
+contagem_continente = df['Continent'].value_counts()
+continente_top = contagem_continente.idxmax()
+print(f"\nContinente com mais empresas: {continente_top} ({contagem_continente.max()} empresas)")
+
+empresas_continente = df[df['Continent'] == continente_top][['Global Rank', 'Company', 'Country']]
+empresas_continente = empresas_continente.sort_values('Global Rank')
+print(f"\nEmpresas do continente {continente_top} e suas posições:\n")
+print(empresas_continente.head(20))  # mostra as 20 primeiras
+
+plt.figure(figsize=(8, 6))
+plt.bar(contagem_continente.index, contagem_continente.values, color='teal')
+plt.title('Número de Empresas por Continente', fontsize=14)
+plt.ylabel('Quantidade de Empresas')
+plt.xlabel('Continente')
+plt.tight_layout()
+plt.show()
+#===================================================================================================================================
+
+
+
+#===================================================================================================================================
+#10. Qual a relação de margem de lucro das empresas no Top 10 do ranking?
+#→ Insight: empresas mais bem colocadas também são as mais eficientes?
+plt.close('all')
+plt.style.use('seaborn-v0_8')
+
+top10 = df.nsmallest(10, 'Global Rank')[['Company', 'Sales ($billion)', 'Profits ($billion)', 'MargemLucro']]
+media_top10 = top10['MargemLucro'].mean()
+media_global = df['MargemLucro'].mean()
+
+plt.figure(figsize=(12, 6))
+bars = plt.bar(top10['Company'], top10['MargemLucro'], color='teal')
+plt.title('Margem de Lucro (%) - Top 10 Empresas do Ranking Global', fontsize=14)
+plt.ylabel('Margem de Lucro (%)')
+plt.xticks(rotation=45, ha='right')
+
+for bar, val in zip(bars, top10['MargemLucro']):
+    plt.text(bar.get_x() + bar.get_width()/2, val + 0.5, f'{val:.1f}%', ha='center', fontsize=9)
+
+plt.tight_layout()
+plt.show()
+
+print(f"\nMédia da Margem de Lucro (Top 10): {media_top10:.2f}%")
+print(f"Média da Margem de Lucro (Global): {media_global:.2f}%")
+
+if media_top10 > media_global:
+    print("Empresas do Top 10 têm margens de lucro acima da média global.")
+else:
+    print("Empresas do Top 10 não apresentam margens de lucro superiores à média global.")
+#===================================================================================
